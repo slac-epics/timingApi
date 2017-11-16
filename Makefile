@@ -8,6 +8,7 @@ DIRS += $(wildcard *Sup)
 DIRS += $(wildcard *App)
 DIRS += $(wildcard *Top)
 DIRS += $(wildcard iocBoot)
+DIRS += documentation
 
 # The build order is controlled by these dependency rules:
 

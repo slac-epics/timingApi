@@ -16,7 +16,7 @@ include $(TOP)/configure/CONFIG
 
 # Add any header files here which should be installed
 INC += bsaCallbackApi.h
-INC += timesyncApi.h
+INC += timingFifoApi.h
 
 # Add any html documentation here
 # HTMLS	+=	index.html

@@ -1,0 +1,14 @@
+bin
+db
+dbd
+html
+include
+lib
+documentation/DoxygenHTML
+RELEASE_SITE
+auto_settings.sav*
+configure/*.local
+O.*/
+*~
+*.swp
+*.log
