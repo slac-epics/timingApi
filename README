@@ -1,3 +1,27 @@
-TODO: Add notes on how to build and run this IOC,
-along with any useful information that would help
-someone else to support this IOC if needed.
+
+This module defines a common timing API for all SLAC timing modules.
+
+The objective is to be able to write timing service clients that work w/ the various
+versions of timing modules that we need to support for LCLS-I and LCLS-II at SLAC.
+
+Currently that includes these modules:
+	event
+	event2
+	evrClient
+	tpr
+
+Of these, tpr is the only module to be reworked to support this timing API as of
+initial introduction, Nov 17, 2017.
+
+Key services provided by the timingApi include BSA callbacks and access to the
+eventCode timing info including epicsTimeStamp, 64bit fiducial pulseId, cpu tsc
+grabbed at ISR time, and a FIFO of these arrival times to support timestamp synchronization
+modules including timesync and timeStampFifo.
+
+Clients such as swBsa, timesync, timeStampFifo, ADUtil, and others that require
+timing services would depend on this timingApi module, but could link w/ any
+timing module that supports this timingApi.
+
+Each timing module should use unique names for it's library objects so we can
+create IOC's w/ multiple apps, one for each timing module.
+
