@@ -623,6 +623,7 @@ WARN_LOGFILE           =
 # with spaces.
 
 INPUT                  = ../timingApiSup/bsaCallbackApi.h \
+                         ../timingApiSup/timingApiTypes.h \
                          ../timingApiSup/timingFifoApi.h
 
 # This tag can be used to specify the character encoding of the source files

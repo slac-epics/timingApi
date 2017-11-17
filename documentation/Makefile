@@ -8,9 +8,15 @@ all: install
 doxygen:
 	doxygen
 
-install: doxygen
+installDoxygenHTML: doxygen
 	mkdir -p ../html
 	cp -r DoxygenHTML/* ../html
+
+ifneq ($(wildcard $(shell which doxygen)),)
+install: installDoxygenHTML
+endif
+
+install:
 	# cp *.html ../html
 	# cp *.jpg ../html
 	# cp *.png ../html

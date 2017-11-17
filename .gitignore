@@ -10,5 +10,6 @@ auto_settings.sav*
 configure/*.local
 O.*/
 *~
+*.bak
 *.swp
 *.log
