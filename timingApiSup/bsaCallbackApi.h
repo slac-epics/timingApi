@@ -1,28 +1,56 @@
-#ifndef	TIMING_API_H
-#define	TIMING_API_H
+#ifndef	BSA_CALLBACK_API_H
+#define	BSA_CALLBACK_API_H
+
+#include "timingApiTypes.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#define EDEF_MAX 64
-typedef uint64_t BsaPulseId;
-
-struct BsaTimingPatternStruct
+/**
+ * BSA Timing Pattern data
+ */
+typedef struct BsaTimingPatternStruct
 {
-	BsaPulseId     pulseId;
-	uint64_t       edefInitMask, edefActiveMask, edefAvgDoneMask, edefUpdateMask;
-	uint64_t       edefMinorMask, edefMajorMask;
-	epicsTimeStamp timeStamp;
-};
+	timingPulseId		pulseId;			/**< 64bit pulseId	*/
+	uint64_t			edefInitMask;		/**< EDEF initialized mask	*/
+	uint64_t			edefActiveMask;		/**< EDEF average-done mask	*/
+	uint64_t			edefAvgDoneMask;	/**< EDEF average-done mask	*/
+	uint64_t			edefUpdateMask;		/**< EDEF update mask	*/
+	uint64_t			edefMinorMask;		/**< EDEF minor severity mask	*/
+	uint64_t			edefMajorMask;		/**< EDEF major severity mask	*/
+	epicsTimeStamp		timeStamp;			/**< Timestamp for this BSA timing data	*/
+}	BsaTimingData;
 
-typedef struct BsaTimingPatternStruct *BsaTimingPattern;
+/**
+ * BsaTimingCallbacks get called w/ 2 parameters
+ *   - pUserPvt is any pointer the callback client needs to establish context
+ *   - newPattern is a pointer to the new BSA timing data
+ *
+ * Timing services must guarantee the BSA timing pattern data in this structure is all
+ * from the same beam pulse and does not change before the callback returns.
+ */
+typedef void (*BsaTimingCallback)( void * pUserPvt, const BsaTimingData * pNewPattern );
 
-typedef void (*BsaTimingCallback)( BsaTimingPattern newPattern );
 
+/**
+ * RegisterBsaTimingCallback is called by the BSA client to register a callback function
+ * for new BsaTimingData.
+ *
+ * The pUserPvt pointer can be used to establish context or set to 0 if not needed.
+ *
+ * Timing services must support this RegisterBsaTimingCallback() function and call the
+ * callback function once for each new BsaTimingData to be compliant w/ this timing BSA API.
+ *
+ * The Timing service may support more than one BSA client, but is allowed to refuse
+ * attempts to register multiple BSA callbacks.
+ *
+ * Each timing service should provide it's timing BSA code using a unique library name
+ * so we can have EPICS IOC's that build applications for multiple timing service types.
+ */
 extern int RegisterBsaTimingCallback( BsaTimingCallback callback, void * pUserPvt );
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-#endif /* TIMING_API_H */
+#endif /* BSA_CALLBACK_API_H */

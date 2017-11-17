@@ -1,27 +1,29 @@
-#ifndef TIMINGFIFOAPI_H
-#define TIMINGFIFOAPI_H 
-/*
- * The minimal declarations needed to make the timing FIFO API work!
- */
+#ifndef TIMING_FIFO_API_H
+#define TIMING_FIFO_API_H 
+
+#include "timingApiTypes.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-#define MAX_TS_QUEUE			512		/**< # timestamps queued per event	*/
-
-#include<epicsTime.h>
+/**
+ * MAX_TS_QUEUE is the size of the timing eventCode arrival time FIFO.
+ * It is also used as the value passed as the incr argument to timingGetFifoInfo()
+ * which resets the index to the most recently arrived timing info.
+ */
+#define MAX_TS_QUEUE			512
 
 /**
- * The timingFifoInfo structure is used to retrieve data from the eventCode arrival time FIFO.
+ * The timingFifoInfo structure is used to retrieve synchronous data from the eventCode arrival time FIFO.
+ * The timing service must guarantee that all values returned via this structure are for the same pulse.
  */
-struct timingFifoInfo
+typedef	struct _timingFifoInfo
 {
 	epicsTimeStamp		fifo_time;		/**< EPICS timestamp for this arrival time	*/
-	long long			fifo_fid;		/**< 64 bit fiducial pulseID				*/
+	timingPulseId		fifo_fid;		/**< 64 bit fiducial pulseID				*/
 	long long			fifo_tsc;		/**< 64 bit cpu timestamp counter			*/
-	int					fifo_status;	/**< 0 on success, else epicsTimeERROR		*/
-};
+}	timingFifoInfo;
 
 /**
  * The timingGetFifoInfo() call allows a timingFifo client to access a
@@ -42,6 +44,8 @@ struct timingFifoInfo
  * FIFO underruns occur by trying to fetch the next timestamp after it's
  * position in the FIFO is reused by a new eventCode arrival time.
  *
+ * The timing service must guarantee that all values returned via this call are for the same pulse.
+ *
  * Return value:
  *   - 0 on success
  *   - epicsTimeError for NULL return ptrs, invalid index, or FIFO overflow/underflow.
@@ -49,17 +53,27 @@ struct timingFifoInfo
  * These values are returned via ptr:
  *   - index ptr: 64 bit FIFO position. Adjusted according to the incr
  *     argument before reading the info from the FIFO
- *   - pFifoInfoRet ptr: epicsTimestamp, 64 bit fiducial, 64 bit tsc, and status
+ *   - pFifoInfoDest ptr: epicsTimestamp, 64 bit fiducial, 64 bit tsc, and status
  */
 extern  int timingGetFifoInfo(	unsigned int        	eventCode,
                             	int                 	incr,
                             	unsigned long long	*	index,
-								timingFifoInfo		*	pFifoInfoRet	);
+								timingFifoInfo		*	pFifoInfoDest	);
 
 /** timingGetLastFiducial returns lastfid, the last fiducial set by ISR.  */
-extern long long timingGetLastFiducial( );
+extern timingPulseId	 timingGetLastFiducial( );
 
+/**
+ * Retrieve the most recent timestamp available
+ */
+extern  int		timingGetCurTimestamp(		epicsTimeStamp	*	pTimeStampDest );/**< Return EPICS timestamp via this ptr	*/
+
+/**
+ * Retrieve the most recent timestamp and pulseId for the specified eventCode
+ */
+extern  int		timingGetEventTimestamp(	epicsTimeStamp	*	pTimeStampDest,	/**< Return EPICS timestamp via this ptr	*/
+											unsigned int		eventCode	);	/**< Which eventCode */
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-#endif /* TIMINGFIFOAPI_H */
+#endif /* TIMING_FIFO_API_H */
