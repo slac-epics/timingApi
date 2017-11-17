@@ -25,7 +25,7 @@ typedef struct BsaTimingPatternStruct
 /**
  * BsaTimingCallbacks get called w/ 2 parameters
  *   - pUserPvt is any pointer the callback client needs to establish context
- *   - newPattern is a pointer to the new BSA timing data
+ *   - pNewPattern is a pointer to the new BSA timing data
  *
  * Timing services must guarantee the BSA timing pattern data in this structure is all
  * from the same beam pulse and does not change before the callback returns.
