@@ -8,11 +8,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * MAX_TS_QUEUE is the size of the timing eventCode arrival time FIFO.
- * It is also used as the value passed as the incr argument to timingGetFifoInfo()
- * which resets the index to the most recently arrived timing info.
+ * TS_INDEX_INIT is a magic value that when used as the incr argument 
+ * to timingGetFifoInfo() tells it to set the index to the most recently
+ * arrived timing info.
  */
-#define MAX_TS_QUEUE			512
+#define TS_INDEX_INIT           1000000
 
 /**
  * The timingFifoInfo structure is used to retrieve synchronous data from the eventCode arrival time FIFO.
@@ -22,15 +22,17 @@ typedef	struct _timingFifoInfo
 {
 	epicsTimeStamp		fifo_time;		/**< EPICS timestamp for this arrival time	*/
 	timingPulseId		fifo_fid;		/**< 64 bit fiducial pulseID				*/
-	long long			fifo_tsc;		/**< 64 bit cpu timestamp counter			*/
+	long long		fifo_tsc;		/**< 64 bit cpu timestamp counter			*/
 }	timingFifoInfo;
 
 /**
  * The timingGetFifoInfo() call allows a timingFifo client to access a
  * FIFO queue of the last MAX_TS_QUEUE eventCode arrival timestamps.
- * Each client has their own index position in the queue which can be controlled w/ the incr argument.
+ * Each client has their own index position in the queue which can be 
+ * controlled w/ the incr argument.
+ *
  * Clients should not write directly to the index value.
- *   - incr==MAX_TS_QUEUE: index set to the position of the most recent eventCode arrival.
+ *   - incr==TS_INDEX_INIT: index set to the position of the most recent eventCode arrival.
  *   - incr!=MAX_TS_QUEUE: index set to index+incr.  Use +1/-1 to advance up and down the queue
  *   - incr==1: Set to 1 once synced to fetch one synced timestamp per sample indefinitely as
  *     long as you don't overrun or underrun.
@@ -58,7 +60,7 @@ typedef	struct _timingFifoInfo
 extern  int timingGetFifoInfo(	unsigned int        	eventCode,
                             	int                 	incr,
                             	unsigned long long	*	index,
-								timingFifoInfo		*	pFifoInfoDest	);
+				timingFifoInfo		*	pFifoInfoDest	);
 
 /** timingGetLastFiducial returns lastfid, the last fiducial set by ISR.  */
 extern timingPulseId	 timingGetLastFiducial( );
