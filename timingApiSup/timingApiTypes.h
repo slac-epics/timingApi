@@ -1,5 +1,5 @@
 #ifndef TIMING_API_TYPES_H
-#define TIMING_API_TYPES_H 
+#define TIMING_API_TYPES_H
 /*
  * The minimal declarations needed to make the timing FIFO API work!
  */
@@ -14,7 +14,7 @@ extern "C" {
 typedef uint64_t timingPulseId;
 
 /** Reserved value for Invalid pulseIds */
-#define	TIMING_PULSEID_INVALID	0xFFFFFFFFFFFFFFFFLL
+#define TIMING_PULSEID_INVALID  0xFFFFFFFFFFFFFFFFLL
 
 
 #ifdef __cplusplus

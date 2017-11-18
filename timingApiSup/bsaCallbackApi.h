@@ -1,5 +1,5 @@
-#ifndef	BSA_CALLBACK_API_H
-#define	BSA_CALLBACK_API_H
+#ifndef BSA_CALLBACK_API_H
+#define BSA_CALLBACK_API_H
 
 #include "timingApiTypes.h"
 
@@ -12,15 +12,15 @@ extern "C" {
  */
 typedef struct BsaTimingPatternStruct
 {
-	timingPulseId		pulseId;			/**< 64bit pulseId	*/
-	uint64_t			edefInitMask;		/**< EDEF initialized mask	*/
-	uint64_t			edefActiveMask;		/**< EDEF average-done mask	*/
-	uint64_t			edefAvgDoneMask;	/**< EDEF average-done mask	*/
-	uint64_t			edefUpdateMask;		/**< EDEF update mask	*/
-	uint64_t			edefMinorMask;		/**< EDEF minor severity mask	*/
-	uint64_t			edefMajorMask;		/**< EDEF major severity mask	*/
-	epicsTimeStamp		timeStamp;			/**< Timestamp for this BSA timing data	*/
-}	BsaTimingData;
+    timingPulseId       pulseId;            /**< 64bit pulseId  */
+    uint64_t            edefInitMask;       /**< EDEF initialized mask  */
+    uint64_t            edefActiveMask;     /**< EDEF average-done mask */
+    uint64_t            edefAvgDoneMask;    /**< EDEF average-done mask */
+    uint64_t            edefUpdateMask;     /**< EDEF update mask   */
+    uint64_t            edefMinorMask;      /**< EDEF minor severity mask   */
+    uint64_t            edefMajorMask;      /**< EDEF major severity mask   */
+    epicsTimeStamp      timeStamp;          /**< Timestamp for this BSA timing data */
+}   BsaTimingData;
 
 /**
  * BsaTimingCallbacks get called w/ 2 parameters
