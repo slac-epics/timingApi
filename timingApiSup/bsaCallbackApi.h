@@ -19,7 +19,7 @@ typedef struct BsaTimingPatternStruct
     uint64_t            edefUpdateMask;     /**< EDEF update mask   */
     uint64_t            edefMinorMask;      /**< EDEF minor severity mask   */
     uint64_t            edefMajorMask;      /**< EDEF major severity mask   */
-    epicsTimeStamp      timeStamp;          /**< Timestamp for this BSA timing data */
+    epicsTimeStamp      timeStamp;          /**< TimeStamp for this BSA timing data */
 }   BsaTimingData;
 
 /**

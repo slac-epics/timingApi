@@ -55,7 +55,7 @@ typedef struct _timingFifoInfo
  * These values are returned via ptr:
  *   - index ptr: 64 bit FIFO position. Adjusted according to the incr
  *     argument before reading the info from the FIFO
- *   - pFifoInfoDest ptr: epicsTimestamp, 64 bit fiducial, 64 bit tsc, and status
+ *   - pFifoInfoDest ptr: epicsTimeStamp, 64 bit fiducial, 64 bit tsc, and status
  */
 extern  int timingGetFifoInfo(  unsigned int            eventCode,
                                 int                     incr,
@@ -65,15 +65,19 @@ extern  int timingGetFifoInfo(  unsigned int            eventCode,
 /** timingGetLastFiducial returns lastfid, the last fiducial set by ISR.  */
 extern timingPulseId     timingGetLastFiducial( );
 
+/** timingGetFiducialForTimeStamp returns the fiducial that corresponds to the specified timestamp.
+ * If the timing module cannot determine the correct fiducial, it returns TIMING_PULSEID_INVALID.  */
+extern timingPulseId     timingGetFiducialForTimeStamp( epicsTimeStamp  timeStamp );
+
 /**
  * Retrieve the most recent timestamp available
  */
-extern  int     timingGetCurTimestamp(      epicsTimeStamp  *   pTimeStampDest );/**< Return EPICS timestamp via this ptr   */
+extern  int     timingGetCurTimeStamp(      epicsTimeStamp  *   pTimeStampDest );/**< Return EPICS timestamp via this ptr   */
 
 /**
  * Retrieve the most recent timestamp and pulseId for the specified eventCode
  */
-extern  int     timingGetEventTimestamp(    epicsTimeStamp  *   pTimeStampDest, /**< Return EPICS timestamp via this ptr    */
+extern  int     timingGetEventTimeStamp(    epicsTimeStamp  *   pTimeStampDest, /**< Return EPICS timestamp via this ptr    */
                                             unsigned int        eventCode   );  /**< Which eventCode */
 #ifdef __cplusplus
 }
