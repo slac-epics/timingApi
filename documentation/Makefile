@@ -6,10 +6,12 @@ HTMLFLAGS = --book --duplex --no-numbered --format pdf14 --title --size letter
 all: install
 
 doxygen:
+	@$(RM) -rf DoxygenHTML 
 	doxygen
 
 installDoxygenHTML: doxygen
-	mkdir -p ../html
+	@$(RM) -rf ../html
+	@$(MKDIR) -p ../html
 	cp -r DoxygenHTML/* ../html
 
 ifneq ($(wildcard $(shell which doxygen)),)
@@ -25,6 +27,6 @@ install:
 clean:
 
 realclean: clean
-	rm -f *.pdf
-	rm -rf DoxygenHTML 
-	rm -rf ../html
+	$(RM) -f *.pdf
+	$(RM) -rf DoxygenHTML 
+	$(RM) -rf ../html
