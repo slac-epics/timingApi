@@ -2,5 +2,11 @@
 Release Notes for timingApi module:
 Please add an entry for each new release w/ the highlights of that release.
 
+R0.3	Dec 6, 2017
+	Fixed inconsistent capitalization of TimeStamp in API functions.
+
+R0.2	Nov 17, 2017
+	Changed MAX_TS_QUEUE to TS_INDEX_INIT.
+
 R0.1	Nov 17, 2017
 	First release of timing API
