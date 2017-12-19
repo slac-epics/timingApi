@@ -2,6 +2,10 @@
 Release Notes for timingApi module:
 Please add an entry for each new release w/ the highlights of that release.
 
+R0.4	Dec 18, 2017
+	Fixed api for timingGetTimeStamp() to match generalTime EVENTTIMEFUN typedef.
+		i.e. eventCode needs to be int, not unsigned int, as epicsTimeEventBestTime is -1
+
 R0.3	Dec 6, 2017
 	Fixed inconsistent capitalization of TimeStamp in API functions.
 

@@ -78,7 +78,7 @@ extern  int     timingGetCurTimeStamp(      epicsTimeStamp  *   pTimeStampDest )
  * Retrieve the most recent timestamp and pulseId for the specified eventCode
  */
 extern  int     timingGetEventTimeStamp(    epicsTimeStamp  *   pTimeStampDest, /**< Return EPICS timestamp via this ptr    */
-                                            int        			eventCode   );  /**< Which eventCode */
+                                            int                 eventCode   );  /**< Which eventCode */
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
