@@ -14,7 +14,7 @@ typedef struct BsaTimingPatternStruct
 {
     timingPulseId       pulseId;            /**< 64bit pulseId  */
     uint64_t            edefInitMask;       /**< EDEF initialized mask  */
-    uint64_t            edefActiveMask;     /**< EDEF average-done mask */
+    uint64_t            edefActiveMask;     /**< EDEF active mask */
     uint64_t            edefAvgDoneMask;    /**< EDEF average-done mask */
     uint64_t            edefUpdateMask;     /**< EDEF update mask   */
     uint64_t            edefMinorMask;      /**< EDEF minor severity mask   */
