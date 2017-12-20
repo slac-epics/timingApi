@@ -11,7 +11,7 @@ extern "C" {
 #include<epicsTime.h>
 
 /** LCLS-II uses 64bit pulseID's */
-typedef uint64_t timingPulseId;
+typedef uint64_t TimingPulseId;
 
 /** Reserved value for Invalid pulseIds */
 #define TIMING_PULSEID_INVALID  0xFFFFFFFFFFFFFFFFLL

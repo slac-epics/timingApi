@@ -12,7 +12,7 @@ extern "C" {
  */
 typedef struct BsaTimingPatternStruct
 {
-    timingPulseId       pulseId;            /**< 64bit pulseId  */
+    TimingPulseId       pulseId;            /**< 64bit pulseId  */
     uint64_t            edefInitMask;       /**< EDEF initialized mask  */
     uint64_t            edefActiveMask;     /**< EDEF active mask */
     uint64_t            edefAvgDoneMask;    /**< EDEF average-done mask */
@@ -32,6 +32,13 @@ typedef struct BsaTimingPatternStruct
  */
 typedef void (*BsaTimingCallback)( void * pUserPvt, const BsaTimingData * pNewPattern );
 
+/**
+ * timingGetCurBsaPattern()
+ *   - pCurBsaPatternRet is a pointer used to return the most recent BSA timing data
+ *
+ * Returns the most recently arrived BSA timing pattern data.
+ */
+typedef int timingGetCurBsaPattern( BsaTimingData * pNewPattern );
 
 /**
  * RegisterBsaTimingCallback is called by the BSA client to register a callback function

@@ -1,6 +1,7 @@
 #ifndef TIMING_FIFO_API_H
 #define TIMING_FIFO_API_H
 
+#include <stdint.h>
 #include "timingApiTypes.h"
 
 #ifdef __cplusplus
@@ -9,65 +10,68 @@ extern "C" {
 
 /**
  * TS_INDEX_INIT is a magic value that when used as the incr argument 
- * to timingGetFifoInfo() tells it to set the index to the most recently
+ * to timingFifoRead() tells it to set the index to the most recently
  * arrived timing info.
  */
 #define TS_INDEX_INIT           1000000
 
 /**
- * The timingFifoInfo structure is used to retrieve synchronous data from the eventCode arrival time FIFO.
+ * The EventTimingData structure is used to retrieve synchronous data from the eventCode arrival time FIFO.
  * The timing service must guarantee that all values returned via this structure are for the same pulse.
  */
-typedef struct _timingFifoInfo
+typedef struct _EventTimingData
 {
     epicsTimeStamp      fifo_time;      /**< EPICS timestamp for this arrival time  */
-    timingPulseId       fifo_fid;       /**< 64 bit fiducial pulseID                */
-    long long           fifo_tsc;       /**< 64 bit cpu timestamp counter           */
-}   timingFifoInfo;
+    TimingPulseId       fifo_fid;       /**< 64 bit fiducial pulseID                */
+    int64_t             fifo_tsc;       /**< 64 bit cpu timestamp counter           */
+}   EventTimingData;
 
 /**
- * The timingGetFifoInfo() call allows a timingFifo client to access a
- * FIFO queue of the last MAX_TS_QUEUE eventCode arrival timestamps.
+ * The timingFifoRead() call allows a timingFifo client to access a
+ * FIFO queue of the last TS_INDEX_INIT eventCode arrival timestamps.
  * Each client has their own index position in the queue which can be 
  * controlled w/ the incr argument.
  *
  * Clients should not write directly to the index value.
  *   - incr==TS_INDEX_INIT: index set to the position of the most recent eventCode arrival.
- *   - incr!=MAX_TS_QUEUE: index set to index+incr.  Use +1/-1 to advance up and down the queue
+ *   - incr!=TS_INDEX_INIT: index set to index+incr.  Use +1/-1 to advance up and down the queue
  *   - incr==1: Set to 1 once synced to fetch one synced timestamp per sample indefinitely as
  *     long as you don't overrun or underrun.
  *
  * The index is adjusted according to the incr argument before reading the
  * eventCode arrival time info from the FIFO
  *
- * FIFO overruns occur by trying to fetch another timestamp when you've already fetched
+ * FIFO underruns occur by trying to fetch another timestamp when you've already fetched
  * the most recent one.
  *
- * FIFO underruns occur by trying to fetch the next timestamp after it's
+ * FIFO overruns occur by trying to fetch the next timestamp after it's
  * position in the FIFO is reused by a new eventCode arrival time.
  *
  * The timing service must guarantee that all values returned via this call are for the same pulse.
  *
  * Return value:
- *   - 0 on success
- *   - epicsTimeError for NULL return ptrs, invalid index, or FIFO overflow/underflow.
+ *   0 on success
+ *   -1 for NULL return ptrs
+ *   -2 for invalid index
+ *   -3 for FIFO overflow
+ *   -4 for FIFO underflow.
  *
  * These values are returned via ptr:
  *   - index ptr: 64 bit FIFO position. Adjusted according to the incr
  *     argument before reading the info from the FIFO
- *   - pFifoInfoDest ptr: epicsTimeStamp, 64 bit fiducial, 64 bit tsc, and status
+ *   - pTimingDataDest ptr: epicsTimeStamp, 64 bit fiducial, and 64 bit tsc
  */
-extern  int timingGetFifoInfo(  unsigned int            eventCode,
-                                int                     incr,
-                                unsigned long long  *   index,
-                                timingFifoInfo      *   pFifoInfoDest   );
+extern  int timingFifoRead( unsigned int        eventCode,
+                            int                 incr,
+                            uint64_t        *   index,
+                            EventTimingData *   pTimingDataDest   );
 
 /** timingGetLastFiducial returns lastfid, the last fiducial set by ISR.  */
-extern timingPulseId     timingGetLastFiducial( );
+extern TimingPulseId timingGetLastFiducial( );
 
 /** timingGetFiducialForTimeStamp returns the fiducial that corresponds to the specified timestamp.
  * If the timing module cannot determine the correct fiducial, it returns TIMING_PULSEID_INVALID.  */
-extern timingPulseId     timingGetFiducialForTimeStamp( epicsTimeStamp  timeStamp );
+extern TimingPulseId timingGetFiducialForTimeStamp( epicsTimeStamp  timeStamp );
 
 /**
  * Retrieve the most recent timestamp available
