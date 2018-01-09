@@ -13,6 +13,7 @@ extern "C" {
 typedef struct BsaTimingData
 {
     TimingPulseId       pulseId;            /**< 64bit pulseId  */
+    epicsTimeStamp      timeStamp;          /**< TimeStamp for this BSA timing data */
     uint64_t            edefInitMask;       /**< EDEF initialized mask  */
     uint64_t            edefActiveMask;     /**< EDEF active mask */
     uint64_t            edefAvgDoneMask;    /**< EDEF average-done mask */
@@ -20,7 +21,6 @@ typedef struct BsaTimingData
     uint64_t            edefUpdateMask;     /**< EDEF update mask   */
     uint64_t            edefMinorMask;      /**< EDEF minor severity mask   */
     uint64_t            edefMajorMask;      /**< EDEF major severity mask   */
-    epicsTimeStamp      timeStamp;          /**< TimeStamp for this BSA timing data */
 }   BsaTimingData;
 
 /**
