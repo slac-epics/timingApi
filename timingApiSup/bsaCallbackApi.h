@@ -16,6 +16,7 @@ typedef struct BsaTimingPatternStruct
     uint64_t            edefInitMask;       /**< EDEF initialized mask  */
     uint64_t            edefActiveMask;     /**< EDEF active mask */
     uint64_t            edefAvgDoneMask;    /**< EDEF average-done mask */
+    uint64_t            edefAllDoneMask;    /**< EDEF all-done mask */
     uint64_t            edefUpdateMask;     /**< EDEF update mask   */
     uint64_t            edefMinorMask;      /**< EDEF minor severity mask   */
     uint64_t            edefMajorMask;      /**< EDEF major severity mask   */
