@@ -10,7 +10,7 @@ extern "C" {
 /**
  * BSA Timing Pattern data
  */
-typedef struct BsaTimingPatternStruct
+typedef struct BsaTimingData
 {
     TimingPulseId       pulseId;            /**< 64bit pulseId  */
     uint64_t            edefInitMask;       /**< EDEF initialized mask  */
