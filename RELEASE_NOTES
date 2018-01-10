@@ -2,6 +2,10 @@
 Release Notes for timingApi module:
 Please add an entry for each new release w/ the highlights of that release.
 
+R0.6	Jan 10, 2018
+	Renamed struct BsaTimingData for sake of consistency
+	Added edefAllDoneMask (nowadays supported by lcls1)
+
 R0.5	Dec 19, 2017
 	Updated timingApi w/ changes agreed to in recent email exchanges w/ Till and Mike.
 
