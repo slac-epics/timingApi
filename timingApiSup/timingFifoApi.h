@@ -16,6 +16,17 @@ extern "C" {
 #define TS_INDEX_INIT           1000000
 
 /**
+ * The BeamData structure is used to retrieve beam related data from the timing stream.
+ * The timing service must guarantee that all values returned via this structure are for the same pulse.
+ */
+typedef struct _BeamData
+{
+    epicsTimeStamp      timeStamp;      /**< EPICS timestamp for this beam information					*/
+    unsigned int		timeSlot;		/**< 360Hz timeslot 1-6											*/
+    unsigned int		beamRequested;	/**< Non-zero when beam	was requested from the injection gun	*/
+}   BeamData;
+
+/**
  * The EventTimingData structure is used to retrieve synchronous data from the eventCode arrival time FIFO.
  * The timing service must guarantee that all values returned via this structure are for the same pulse.
  */
@@ -83,6 +94,38 @@ extern  int     timingGetCurTimeStamp(      epicsTimeStamp  *   pTimeStampDest )
  */
 extern  int     timingGetEventTimeStamp(    epicsTimeStamp  *   pTimeStampDest, /**< Return EPICS timestamp via this ptr    */
                                             int                 eventCode   );  /**< Which eventCode */
+
+/**
+ * Retrieve the most recent beam data
+ */
+extern  int     timingGetBeamData(    TimingBeamData  *   pBeamDataDest ); /**< Return Beam data via this ptr    */
+
+/**
+ * TimingEventCallbacks get called w/ 1 parameter
+ *   - pUserPvt is any pointer the callback client needs to establish context
+ *
+ * Timing services will call this callback on every timing event received.
+ * Note that the timing service will only receive timing data for events it has subscribed to.
+ */
+typedef void (*TimingEventCallback)( void * pUserPvt );
+
+/**
+ * RegisterTimingEventCallback is called by timing service clients to
+ * register a callback function for new timing events.
+ *
+ * The pUserPvt pointer can be used to establish context or set to 0 if not needed.
+ *
+ * Timing services must support this RegisterTimingEventCallback() function and call the
+ * callback function once for each new timing event to be compliant w/ this timing BSA API.
+ *
+ * Each callback client should get only one callback per beam pulse, even if there
+ * are multiple timing events per pulse, such as w/ LCLS-1.  For LCLS-1 specifically, the timing
+ * callback should be made for event code 1, the fiducial.
+ *
+ * The Timing service must support multiple timingEventCallbacks.
+ */
+extern int RegisterTimingEventCallback( TimingEventCallback callback, void * pUserPvt );
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
