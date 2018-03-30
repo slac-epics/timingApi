@@ -39,7 +39,7 @@ typedef void (*BsaTimingCallback)( void * pUserPvt, const BsaTimingData * pNewPa
  *
  * Returns the most recently arrived BSA timing pattern data.
  */
-typedef int timingGetCurBsaPattern( BsaTimingData * pNewPattern );
+int timingGetCurBsaPattern( BsaTimingData * pNewPattern );
 
 /**
  * RegisterBsaTimingCallback is called by the BSA client to register a callback function
