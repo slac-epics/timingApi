@@ -98,7 +98,7 @@ extern  int     timingGetEventTimeStamp(    epicsTimeStamp  *   pTimeStampDest, 
 /**
  * Retrieve the most recent beam data
  */
-extern  int     timingGetBeamData(    TimingBeamData  *   pBeamDataDest ); /**< Return Beam data via this ptr    */
+extern  int     timingGetBeamData(    BeamData  *   pBeamDataDest ); /**< Return Beam data via this ptr    */
 
 /**
  * TimingEventCallbacks get called w/ 1 parameter
