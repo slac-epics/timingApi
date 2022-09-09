@@ -80,10 +80,6 @@ extern  int timingFifoRead( unsigned int        eventCode,
 /** timingGetLastFiducial returns lastfid, the last fiducial set by ISR.  */
 extern TimingPulseId timingGetLastFiducial( );
 
-/** timingGetFiducialForTimeStamp returns the fiducial that corresponds to the specified timestamp.
- * If the timing module cannot determine the correct fiducial, it returns TIMING_PULSEID_INVALID.  */
-extern TimingPulseId timingGetFiducialForTimeStamp( epicsTimeStamp  timeStamp );
-
 /**
  * Retrieve the most recent timestamp available
  */

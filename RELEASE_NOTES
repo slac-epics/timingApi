@@ -2,6 +2,9 @@
 Release Notes for timingApi module:
 Please add an entry for each new release w/ the highlights of that release.
 
+R0.7    Sep 8, 2022
+        Removed timingGetFiducialForTimeStamp.
+
 R0.6	Jan 10, 2018
 	Renamed struct BsaTimingData for sake of consistency
 	Added edefAllDoneMask (nowadays supported by lcls1)
