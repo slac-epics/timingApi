@@ -122,6 +122,13 @@ typedef void (*TimingEventCallback)( void * pUserPvt );
  */
 extern int RegisterTimingEventCallback( TimingEventCallback callback, void * pUserPvt );
 
+/**
+ * lcls1_timing is a global variable indicating if we are receiving LCLS1 timing (1) or not (0).
+ *
+ * Unfortunately, we sometimes need to know if which sort of timing we are receiving so we
+ * can ignore invalid LCLS1 fiducials (0x1ffff).
+ */
+extern int lcls1_timing;
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
