@@ -4,12 +4,12 @@
  * The minimal declarations needed to make the timing FIFO API work!
  */
 
+#include <epicsTime.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-#include <epicsTime.h>
-#include <stdint.h>
 
 /** LCLS-II uses 64bit pulseID's */
 typedef uint64_t TimingPulseId;
