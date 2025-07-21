@@ -38,6 +38,47 @@ typedef struct _EventTimingData
 }   EventTimingData;
 
 /**
+ * Capture all information from the (L2SI) timing stream.
+ * Beam info contains:
+ *   - fixed_rates  : 10 bits // 10
+ *   - ac_rates     :  6 bits // 16
+ *   - time_slots   :  8 bits // 24
+ *   - beam_present :  1 bit  // 25
+ *   - BLOCKED      :  3 bits // 28
+ *   - beam_dest    :  4 bits // 32
+ */
+typedef struct _EventTimingStream
+{
+    EventTimingData     fifo_evt_timing;
+    uint32_t            fifo_beam_info;
+    uint16_t            fifo_seq_info[18];
+}   EventTimingStream;
+
+/**
+ * Bit ranges are inclusive.
+ * fifo_rates:
+ *   - bits 15:10 - AC rates
+ *   - bits 9:7   - Unused
+ *   - bits 6:0   - Fixed rates
+ * fifo_timeslots:
+ *   - bit 15     - 71 kHz resync
+ *   - bits 14:3  - Clocks since timeslot change
+ *   - bits 2:0   - AC timeslot (1-6) 
+ * fifo_beam_req:
+ *   - bits 31:16 - charge (pC)
+ *   - bits 7:4   - destination
+ *   - bit  0     - Beam present
+ */
+typedef struct _EventTimingMessage
+{
+    EventTimingData     fifo_evt_timing;       // Byte offset in EVENT msg:
+    uint16_t            fifo_rates;            // 24 byte offset
+    uint16_t            fifo_timeslots;        // 26 byte offset
+    uint32_t            fifo_beam_req;         // 28 byte offset
+    uint16_t            fifo_seq_info[18];     // 56 byte offset
+}   EventTimingMessage;
+
+/**
  * The timingFifoRead() call allows a timingFifo client to access a
  * FIFO queue of the last TS_INDEX_INIT eventCode arrival timestamps.
  * Each client has their own index position in the queue which can be 
@@ -76,6 +117,17 @@ extern  int timingFifoRead( unsigned int        eventCode,
                             int                 incr,
                             uint64_t        *   index,
                             EventTimingData *   pTimingDataDest   );
+
+/**
+ * The timingFifoReadFull() call is as timingFifoRead() but also returns
+ * additional information into the destination pointer, such as beam
+ * destination etc. I.e. this function returns a full event message.
+ * Currently only useful for LCLS2.
+ */
+extern  int timingFifoReadFull( unsigned int           eventCode,
+                                int                    incr,
+                                uint64_t           *   index,
+                                EventTimingMessage *   pTimingDataDest   );
 
 /** timingGetLastFiducial returns lastfid, the last fiducial set by ISR.  */
 extern TimingPulseId timingGetLastFiducial( );
