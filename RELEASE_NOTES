@@ -2,6 +2,10 @@
 Release Notes for timingApi module:
 Please add an entry for each new release w/ the highlights of that release.
 
+R0.11   Jul 21, 2025
+        Add timingFifoReadFull (+ associated structs) for accessing additional information
+        from event messages.
+
 R0.10   Jul 13, 2023
         Added lcls1_timing.
 

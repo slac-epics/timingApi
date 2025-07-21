@@ -38,6 +38,30 @@ typedef struct _EventTimingData
 }   EventTimingData;
 
 /**
+ * Bit ranges are inclusive.
+ * fifo_rates:
+ *   - bits 15:10 - AC rates
+ *   - bits 9:7   - Unused
+ *   - bits 6:0   - Fixed rates
+ * fifo_timeslots:
+ *   - bit 15     - 71 kHz resync
+ *   - bits 14:3  - Clocks since timeslot change
+ *   - bits 2:0   - AC timeslot (1-6) 
+ * fifo_beam_req:
+ *   - bits 31:16 - charge (pC)
+ *   - bits 7:4   - destination
+ *   - bit  0     - Beam present
+ */
+typedef struct _EventTimingMessage
+{
+    EventTimingData     fifo_evt_timing;       // Byte offset in EVENT msg:
+    uint16_t            fifo_rates;            // 24 byte offset
+    uint16_t            fifo_timeslots;        // 26 byte offset
+    uint32_t            fifo_beam_req;         // 28 byte offset
+    uint16_t            fifo_seq_info[18];     // 56 byte offset
+}   EventTimingMessage;
+
+/**
  * The timingFifoRead() call allows a timingFifo client to access a
  * FIFO queue of the last TS_INDEX_INIT eventCode arrival timestamps.
  * Each client has their own index position in the queue which can be 
@@ -76,6 +100,23 @@ extern  int timingFifoRead( unsigned int        eventCode,
                             int                 incr,
                             uint64_t        *   index,
                             EventTimingData *   pTimingDataDest   );
+
+/**
+ * The timingFifoReadFull() call is as timingFifoRead() but also adds
+ * additional information into the passed destination pointer, such as beam
+ * destination etc. I.e. this function returns a full event message.
+ * Currently only useful for LCLS2.
+ * Return values are identical to those for timingFifoRead: 0 for success
+ * otherwise an error code:
+ *     -1 for NULL pTimingDataDest
+ *     -2 for invalid index
+ *     -3 for FIFO overflow
+ *     -4 for FIFO underflow
+ */
+extern  int timingFifoReadFull( unsigned int           eventCode,
+                                int                    incr,
+                                uint64_t           *   index,
+                                EventTimingMessage *   pTimingDataDest   );
 
 /** timingGetLastFiducial returns lastfid, the last fiducial set by ISR.  */
 extern TimingPulseId timingGetLastFiducial( );
