@@ -38,23 +38,6 @@ typedef struct _EventTimingData
 }   EventTimingData;
 
 /**
- * Capture all information from the (L2SI) timing stream.
- * Beam info contains:
- *   - fixed_rates  : 10 bits // 10
- *   - ac_rates     :  6 bits // 16
- *   - time_slots   :  8 bits // 24
- *   - beam_present :  1 bit  // 25
- *   - BLOCKED      :  3 bits // 28
- *   - beam_dest    :  4 bits // 32
- */
-typedef struct _EventTimingStream
-{
-    EventTimingData     fifo_evt_timing;
-    uint32_t            fifo_beam_info;
-    uint16_t            fifo_seq_info[18];
-}   EventTimingStream;
-
-/**
  * Bit ranges are inclusive.
  * fifo_rates:
  *   - bits 15:10 - AC rates
@@ -119,10 +102,16 @@ extern  int timingFifoRead( unsigned int        eventCode,
                             EventTimingData *   pTimingDataDest   );
 
 /**
- * The timingFifoReadFull() call is as timingFifoRead() but also returns
- * additional information into the destination pointer, such as beam
+ * The timingFifoReadFull() call is as timingFifoRead() but also adds
+ * additional information into the passed destination pointer, such as beam
  * destination etc. I.e. this function returns a full event message.
  * Currently only useful for LCLS2.
+ * Return values are identical to those for timingFifoRead: 0 for success
+ * otherwise an error code:
+ *     -1 for NULL pTimingDataDest
+ *     -2 for invalid index
+ *     -3 for FIFO overflow
+ *     -4 for FIFO underflow
  */
 extern  int timingFifoReadFull( unsigned int           eventCode,
                                 int                    incr,
